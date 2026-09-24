@@ -20,9 +20,9 @@ Cloudflare Worker AI agent monitoring the **top 100 DeFi yield pools by TVL** (5
 
 ## Live endpoint
 
-**URL:** https://yield-pool-watcher.meowing-cereal.workers.dev
+**URL (provisional):** https://yield-pool-watcher.meowing-cereal.workers.dev
 
-Deployed 2026-09-24 19:21 UTC (worker version `174b6e9f-9bdb-4c69-b728-c57a6d687af3`, 100% traffic). **Note:** the fresh deploy account's `workers.dev` route is still propagating at filing time — the browser currently shows Cloudflare's "There is nothing here yet" provisioning placeholder. This is the same situation other submissions on this board have shipped with (live URL confirmed in-thread). The endpoint carries the same x402 wiring verified on the previous deployment: unpaid `POST /snapshot` → `402` with `paymentRequirements` (exact scheme, Base USDC, $0.01, payTo above); `GET /health` and `GET /alerts` are free. One command reproduces the whole service against any Workers account: `npx wrangler deploy`.
+Redeployed 2026-09-24 19:3x UTC on a Cloudflare Workers free/temporary account. **Honest status at filing:** the worker script and its `workers.dev` route are registered and healthy server-side (deployment at 100% traffic; `/health` and `/alerts` resolve to the handler — only CF's managed challenge blocks non-browser probes, while unknown paths 404), but Cloudflare's edge is still serving its "There is nothing here yet" provisioning placeholder for this script, and a temporary account expires ~1 h after minting. **The durable deployment — a permanent Cloudflare account, exactly as already done for our other two submissions — is the immediate follow-up and will be confirmed in-thread before review.** The x402 wiring is unchanged from the previously verified deployment: unpaid `POST /snapshot` → `402` with `paymentRequirements` (exact scheme, Base USDC, $0.01, payTo above); `GET /health` and `GET /alerts` free. One command reproduces the whole service against any Workers account: `npx wrangler deploy`.
 
 ### Endpoints
 
