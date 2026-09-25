@@ -14,15 +14,28 @@ Cloudflare Worker AI agent monitoring the **top 100 DeFi yield pools by TVL** (5
 - **CREATE2** Uniswap V3 pool-address derivation using llama token addresses; **EIP-55** checksum verified against the EIP-55 test vector
 - **KV storage**: 1 h snapshot TTL, 24 h alert TTL, 1 h cooldown TTL
 
-## Tests (re-run 2026-09-24)
+## Tests (re-run 2026-09-25 after deploy fix)
 
-**62/62 vitest green** across 6 files (delta, thresholds, llama, alerts, foundation kv/x402/types), `npx tsc --noEmit` clean.
+**92/92 vitest green** across 7 files (delta, thresholds, llama, alerts, subgraph, foundation kv/x402/types), `tsc --noEmit` clean.
 
-## Live endpoint
+## Live endpoint — VERIFIED LIVE 2026-09-25 ~21:00 UTC
 
-**URL (provisional):** https://yield-pool-watcher.meowing-cereal.workers.dev
+**URL (permanent account, Near Rosemary — same account as our other two submissions):**
+https://yield-pool-watcher.near-rosemary.workers.dev
 
-Redeployed 2026-09-24 19:3x UTC on a Cloudflare Workers free/temporary account. **Honest status at filing:** the worker script and its `workers.dev` route are registered and healthy server-side (deployment at 100% traffic; `/health` and `/alerts` resolve to the handler — only CF's managed challenge blocks non-browser probes, while unknown paths 404), but Cloudflare's edge is still serving its "There is nothing here yet" provisioning placeholder for this script, and a temporary account expires ~1 h after minting. **The durable deployment — a permanent Cloudflare account, exactly as already done for our other two submissions — is the immediate follow-up and will be confirmed in-thread before review.** The x402 wiring is unchanged from the previously verified deployment: unpaid `POST /snapshot` → `402` with `paymentRequirements` (exact scheme, Base USDC, $0.01, payTo above); `GET /health` and `GET /alerts` free. One command reproduces the whole service against any Workers account: `npx wrangler deploy`.
+Fresh measurement, sponsor-grade evidence:
+
+- `GET /health` → **200** `{"status":"ok","service":"yield-pool-watcher","pools":100,"cron":"*/10 * * * *","x402":{...}}`
+- `POST /snapshot` unpaid → **402** with full x402 payment requirements (exact scheme, Base USDC `0x833589fC…`, $0.01 `maxAmountRequired 10000`, payTo `0x76EfB727cd3271C7DE22f92437Be212766C9631f`)
+- `GET /alerts` → **200** `{"alerts":[],"count":0}`
+
+**Root cause of the earlier "nothing here yet" placeholder (found and fixed):** the
+worker entrypoint exported only `{ app, scheduled }` — no default export — so the
+deployed module worker had no fetch handler and Cloudflare served its placeholder
+page on every route. This was misdiagnosed earlier as a Cloudflare edge
+provisioning fault; it was a one-line code fix (`export default { fetch }` wrapping
+`app.fetch`), committed to the repo and redeployed. Tests: **92/92 vitest green**
+after the fix.
 
 ### Endpoints
 
@@ -32,8 +45,7 @@ Redeployed 2026-09-24 19:3x UTC on a Cloudflare Workers free/temporary account. 
 
 ## Honest limitations
 
-- Deploy account is a Cloudflare temporary/preview account (workers.dev free tier); the repo deploys to any Workers account with `wrangler deploy` in under a minute (no secrets required).
-- Cron-triggered 10-min polling requires a paid Workers plan (free accounts allow 0 cron triggers) — the paid API is fully pull-based.
+- Cron-triggered 10-min polling requires a paid Workers plan (free accounts allow 0 cron triggers; the route flag + workers.dev serving are live) — the paid API is fully pull-based.
 
 ## Payout wallet (per bounty instructions)
 
