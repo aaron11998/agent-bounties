@@ -112,3 +112,8 @@ wrangler deploy
 
 **Submitter:** altaranexus-ship-it
 **Solana Wallet:** (for payout)
+
+## Payout Wallets
+
+**Solana:** `5j9ct6FiFrmMK6umMpyFC3jcCMFFHF2oRvTwuv459VMv`
+**EVM (Base / x402 settlement):** `0x76EfB727cd3271C7DE22f92437Be212766C9631f`
