@@ -116,7 +116,7 @@ wrangler deploy
 
 ## Repository
 
-**GitHub:** https://github.com/aaron11998/agent-bounties
+**GitHub:** https://github.com/aaron11998/smart-contract-risk-scorer
 
 ---
 
