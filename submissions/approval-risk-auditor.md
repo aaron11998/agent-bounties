@@ -69,7 +69,7 @@
 
 ## Live Link
 
-**Deployment URL:** https://approval-risk-auditor.stripe-soybean.workers.dev
+**Deployment URL:** https://approval-risk-auditor.near-rosemary.workers.dev
 
 - `GET /health` → `{"status":"ok", "chains":{...}}` (verified 200, 7/7 chains configured)
 - `GET /.well-known/x402.json` → x402 manifest (verified 200)
